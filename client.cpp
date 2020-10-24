@@ -62,29 +62,24 @@ int main(int argc, char** argv) {
         return 0;
     }
 
-    std::string _fn = filename;
-    std::string _info = _fn;
+    std::string _info = filename;
     send(sock, _info.c_str(), strlen(_info.c_str()), 0);
 
     fstream file;
-    file.open(filename, ios::in); 
+    file.open(filename, ios::in|ios::binary); 
     if (file.is_open()) {
         std::string line;
         while(getline(file, line)) {
-            std::string data = line + "\n";
-            send(sock, data.c_str(), strlen(data.c_str()), 0);
+            send(sock, line.c_str(), strlen(line.c_str()), 0);
         }
         file.close();
+        std::string _success = _info + " sent to " + argv[2] + " on port " + argv[3];
+        std::cout << _success;
     }
 
     closesocket(sock);
     WSACleanup();
     return 0;
 }
-
-
-
-
-
 
 
