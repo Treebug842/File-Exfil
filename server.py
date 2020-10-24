@@ -26,19 +26,17 @@ try:
 			data = conn.recv(4096)
 			if not data:
 				break
-			if start == 0:
-				print(data.strip('\n') + " recieved from " + str(address[0]) + " on port " + str(address[1]))
-				filename = str(data)
-			else:
-				filedata.append(data)
-			start = 1
+			filedata.append(data)
 		conn.close()
+		filename = filedata.pop(0)
 		output = save_dest + "/" + filename if save_dest != None else filename
 		with open(output, "wb") as file:
 			for line in filedata:
 				file.write(line)
 		filedata = []
-		start = 0
+		print(f"{filename.decode()} recieved from {address[0]} on port {address[1]}")
 except KeyboardInterrupt:
 	print("\nStopping...")
 	exit()
+
+	
